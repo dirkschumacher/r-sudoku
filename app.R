@@ -26,17 +26,17 @@ if (!file.exists("base_model.rds")) {
     set_objective(0) %>%
 
     # only one number can be assigned per cell
-    add_constraint(sum_exp(x[i, j, k], k = 1:9) == 1, i = 1:n, j = 1:n) %>%
+    add_constraint(sum_expr(x[i, j, k], k = 1:9) == 1, i = 1:n, j = 1:n) %>%
 
     # each number is exactly once in a row
-    add_constraint(sum_exp(x[i, j, k], j = 1:n) == 1, i = 1:n, k = 1:9) %>%
+    add_constraint(sum_expr(x[i, j, k], j = 1:n) == 1, i = 1:n, k = 1:9) %>%
 
     # each number is exactly once in a column
-    add_constraint(sum_exp(x[i, j, k], i = 1:n) == 1, j = 1:n, k = 1:9) %>%
+    add_constraint(sum_expr(x[i, j, k], i = 1:n) == 1, j = 1:n, k = 1:9) %>%
 
     # each 3x3 square must have all numbers
     add_constraint(
-      sum_exp(x[i, j, k], i = 1:3 + sx, j = 1:3 + sy) == 1,
+      sum_expr(x[i, j, k], i = 1:3 + sx, j = 1:3 + sy) == 1,
       sx = seq(0, n - 3, 3),
       sy = seq(0, n - 3, 3),
       k = 1:9
@@ -106,7 +106,7 @@ server <- function(input, output) {
   }
 
   solution_status <- reactive({
-    current_solution()@status
+    solver_status(current_solution())
   })
 
   # update the right table whenever
@@ -162,6 +162,7 @@ server <- function(input, output) {
 }
 
 ui <- fluidPage(
+  includeHTML("github.html"),
   tags$style(
     # table css by GCyrillus (https://stackoverflow.com/users/2442099/gcyrillus)
     # http://stackoverflow.com/a/23497700
