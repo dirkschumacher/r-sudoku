@@ -6,6 +6,7 @@ library(ompr) # devtools::install_github("dirkschumacher/ompr")
 library(ompr.roi) # devtools::install_github("dirkschumacher/ompr.roi")
 library(dplyr)
 library(purrr)
+library(purrrlyr)
 library(lazyeval)
 
 # the base model
